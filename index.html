@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noticias Globales</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header, footer { background-color: #003366; color: white; padding: 1em; text-align: center; }
+    nav { background-color: #0055a5; overflow: auto; white-space: nowrap; }
+    nav a {
+      display: inline-block;
+      color: white;
+      padding: 1em;
+      text-decoration: none;
+    }
+    nav a:hover { background-color: #003366; }
+    main { display: flex; flex-wrap: wrap; padding: 1em; justify-content: center; }
+    section {
+      flex: 1 1 400px;
+      margin: 1em;
+      padding: 1em;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+      max-width: 600px;
+    }
+    h2 { color: #003366; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin-bottom: 0.5em; }
+    a { text-decoration: none; color: #0055a5; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Noticias Globales</h1>
+    <p>Economía, Política, Ciencia, Tecnología, Clima y más</p>
+  </header>
+  <nav>
+    <a href="#argentina">Argentina</a>
+    <a href="#internacional">Internacional</a>
+    <a href="#economia">Economía</a>
+    <a href="#politica">Política</a>
+    <a href="#ciencia">Ciencia</a>
+    <a href="#tecnologia">Tecnología</a>
+    <a href="#medicina">Medicina</a>
+    <a href="#espacio">Espacio</a>
+    <a href="#manufactura">Manufactura</a>
+    <a href="#clima">Clima</a>
+    <a href="#armamento">Armamento</a>
+    <a href="#geopolitica">Geopolítica</a>
+    <a href="#energia">Energía</a>
+    <a href="#automotriz">Automotriz</a>
+  </nav>
+  <main>
+    <section id="ciencia"><h2>Ciencia</h2><ul><li><a href="#">Descubren nuevo estado cuántico</a></li><li><a href="#">Telescopio Webb detecta moléculas</a></li></ul></section>
+    <section id="tecnologia"><h2>Tecnología</h2><ul><li><a href="#">Apple lanza chip cuántico</a></li><li><a href="#">Microsoft centro de datos verde</a></li></ul></section>
+    <section id="medicina"><h2>Medicina</h2><ul><li><a href="#">Vacuna contra Alzheimer fase 3</a></li><li><a href="#">Terapia génica cura anemia</a></li></ul></section>
+    <section id="espacio"><h2>Espacio</h2><ul><li><a href="#">Misión a Marte 2033</a></li><li><a href="#">China lanza nueva estación</a></li></ul></section>
+    <section id="manufactura"><h2>Manufactura</h2><ul><li><a href="#">Alemania automatiza industria</a></li><li><a href="#">Toyota robots ensambladores</a></li></ul></section>
+    <section id="clima"><h2>Clima</h2><ul><li><a href="#">IPCC alerta sobre deshielo</a></li><li><a href="#">Reforestación en Amazonas</a></li></ul></section>
+    <section id="armamento"><h2>Armamento</h2><ul><li><a href="#">EE.UU. prueba misil hipersónico</a></li><li><a href="#">Ucrania recibe sistema antimisiles</a></li></ul></section>
+    <section id="geopolitica"><h2>Geopolítica</h2><ul><li><a href="#">Tensiones en Indo-Pacífico</a></li><li><a href="#">Elecciones en Europa</a></li></ul></section>
+    <section id="energia"><h2>Energía</h2><ul><li><a href="#">OPEP recortes en producción</a></li><li><a href="#">China planta solar flotante</a></li></ul></section>
+    <section id="automotriz"><h2>Automotriz</h2><ul><li><a href="#">Tesla auto sin volante</a></li><li><a href="#">Volkswagen baterías sólidas</a></li></ul></section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Noticias Globales</p>
+  </footer>
+</body>
+</html>
