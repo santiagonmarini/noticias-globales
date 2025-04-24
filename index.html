@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Noticias Globales</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f0f2f5; }
     header, footer { background-color: #003366; color: white; padding: 1em; text-align: center; }
-    nav { background-color: #0055a5; overflow: auto; white-space: nowrap; }
+    nav { background-color: #0055a5; overflow-x: auto; white-space: nowrap; }
     nav a {
       display: inline-block;
       color: white;
@@ -21,11 +21,12 @@
       flex: 1 1 400px;
       margin: 1em;
       padding: 1em;
-      background-color: #f2f2f2;
+      background-color: white;
       border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       max-width: 600px;
     }
-    h2 { color: #003366; }
+    h2 { color: #003366; font-size: 1.3em; }
     ul { list-style-type: none; padding: 0; }
     li { margin-bottom: 0.5em; }
     a { text-decoration: none; color: #0055a5; }
@@ -35,38 +36,101 @@
 <body>
   <header>
     <h1>Noticias Globales</h1>
-    <p>Economía, Política, Ciencia, Tecnología, Clima y más</p>
+    <p>Actualizadas automáticamente desde fuentes confiables</p>
   </header>
   <nav>
-    <a href="#argentina">Argentina</a>
     <a href="#internacional">Internacional</a>
-    <a href="#economia">Economía</a>
-    <a href="#politica">Política</a>
+    <a href="#argentina">Argentina</a>
+    <a href="#economía">Economía</a>
     <a href="#ciencia">Ciencia</a>
-    <a href="#tecnologia">Tecnología</a>
     <a href="#medicina">Medicina</a>
     <a href="#espacio">Espacio</a>
-    <a href="#manufactura">Manufactura</a>
+    <a href="#tecnología">Tecnología</a>
     <a href="#clima">Clima</a>
-    <a href="#armamento">Armamento</a>
-    <a href="#geopolitica">Geopolítica</a>
-    <a href="#energia">Energía</a>
+    <a href="#energía">Energía</a>
     <a href="#automotriz">Automotriz</a>
   </nav>
   <main>
-    <section id="ciencia"><h2>Ciencia</h2><ul><li><a href="#">Descubren nuevo estado cuántico</a></li><li><a href="#">Telescopio Webb detecta moléculas</a></li></ul></section>
-    <section id="tecnologia"><h2>Tecnología</h2><ul><li><a href="#">Apple lanza chip cuántico</a></li><li><a href="#">Microsoft centro de datos verde</a></li></ul></section>
-    <section id="medicina"><h2>Medicina</h2><ul><li><a href="#">Vacuna contra Alzheimer fase 3</a></li><li><a href="#">Terapia génica cura anemia</a></li></ul></section>
-    <section id="espacio"><h2>Espacio</h2><ul><li><a href="#">Misión a Marte 2033</a></li><li><a href="#">China lanza nueva estación</a></li></ul></section>
-    <section id="manufactura"><h2>Manufactura</h2><ul><li><a href="#">Alemania automatiza industria</a></li><li><a href="#">Toyota robots ensambladores</a></li></ul></section>
-    <section id="clima"><h2>Clima</h2><ul><li><a href="#">IPCC alerta sobre deshielo</a></li><li><a href="#">Reforestación en Amazonas</a></li></ul></section>
-    <section id="armamento"><h2>Armamento</h2><ul><li><a href="#">EE.UU. prueba misil hipersónico</a></li><li><a href="#">Ucrania recibe sistema antimisiles</a></li></ul></section>
-    <section id="geopolitica"><h2>Geopolítica</h2><ul><li><a href="#">Tensiones en Indo-Pacífico</a></li><li><a href="#">Elecciones en Europa</a></li></ul></section>
-    <section id="energia"><h2>Energía</h2><ul><li><a href="#">OPEP recortes en producción</a></li><li><a href="#">China planta solar flotante</a></li></ul></section>
-    <section id="automotriz"><h2>Automotriz</h2><ul><li><a href="#">Tesla auto sin volante</a></li><li><a href="#">Volkswagen baterías sólidas</a></li></ul></section>
+    <section id="internacional">
+      <h2>Internacional</h2>
+      <ul id="feed-internacional"></ul>
+    </section>
+    <section id="argentina">
+      <h2>Argentina</h2>
+      <ul id="feed-argentina"></ul>
+    </section>
+    <section id="economía">
+      <h2>Economía</h2>
+      <ul id="feed-economía"></ul>
+    </section>
+    <section id="ciencia">
+      <h2>Ciencia</h2>
+      <ul id="feed-ciencia"></ul>
+    </section>
+    <section id="medicina">
+      <h2>Medicina</h2>
+      <ul id="feed-medicina"></ul>
+    </section>
+    <section id="espacio">
+      <h2>Espacio</h2>
+      <ul id="feed-espacio"></ul>
+    </section>
+    <section id="tecnología">
+      <h2>Tecnología</h2>
+      <ul id="feed-tecnología"></ul>
+    </section>
+    <section id="clima">
+      <h2>Clima</h2>
+      <ul id="feed-clima"></ul>
+    </section>
+    <section id="energía">
+      <h2>Energía</h2>
+      <ul id="feed-energía"></ul>
+    </section>
+    <section id="automotriz">
+      <h2>Automotriz</h2>
+      <ul id="feed-automotriz"></ul>
+    </section>
+
   </main>
   <footer>
     <p>&copy; 2025 Noticias Globales</p>
   </footer>
+  <script>
+    const feeds = {
+      "internacional": "https://feeds.bbci.co.uk/news/world/rss.xml",
+      "argentina": "https://www.infobae.com/argentina/feed",
+      "economía": "https://www.bloomberg.com/feed/podcast/etf-report.xml",
+      "ciencia": "https://www.nature.com/subjects/news.rss",
+      "medicina": "https://www.medscape.com/rss",
+      "espacio": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+      "tecnología": "https://techcrunch.com/feed/",
+      "clima": "https://www.noaa.gov/news/rss.xml",
+      "energía": "https://www.energy.gov/rss/office-energy-efficiency-renewable-energy.xml",
+      "automotriz": "https://www.autoblog.com/rss.xml",
+
+    };
+
+    for (const [key, url] of Object.entries(feeds)) {
+      fetch("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url))
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById("feed-" + key);
+          if (data.items) {
+            data.items.slice(0, 5).forEach(item => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
+              list.appendChild(li);
+            });
+          }
+        })
+        .catch(error => {
+          const list = document.getElementById("feed-" + key);
+          const li = document.createElement("li");
+          li.textContent = "No se pudieron cargar noticias.";
+          list.appendChild(li);
+        });
+    }
+  </script>
 </body>
 </html>
