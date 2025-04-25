@@ -3,151 +3,74 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noticias Globales</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f0f2f5; }
-    header, footer { background-color: #003366; color: white; padding: 1em; text-align: center; }
-    nav { background-color: #0055a5; overflow-x: auto; white-space: nowrap; }
-    nav a { display: inline-block; color: white; padding: 1em; text-decoration: none; }
-    nav a:hover { background-color: #003366; }
-    main { display: flex; flex-direction: column; padding: 1em; gap: 1em; }
-    section { background-color: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 1em; }
-    h2 { color: #003366; font-size: 1.3em; margin-bottom: 0.5em; }
-    .noticias-scroll { display: flex; overflow-x: auto; gap: 1em; scroll-behavior: smooth; padding-bottom: 0.5em; }
-    .noticia { min-width: 300px; max-width: 300px; background: #f9f9f9; border: 1px solid #ddd;
-               padding: 0.5em; border-radius: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .noticia a { text-decoration: none; color: #0055a5; font-weight: bold; }
-    .controls { background: #e0e0e0; padding: 1em; text-align: center; }
-    .controls input, .controls select {
-      padding: 0.5em; margin: 0.5em; font-size: 1em;
-    }
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #333; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; }
+    .category { margin: 1rem; }
+    .category h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .news-container { display: flex; overflow-x: auto; gap: 1rem; padding: 0.5rem; background: white; border-radius: 8px; }
+    .news-card { flex: 0 0 300px; background: #eaeaea; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .news-card h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+    .news-card p { font-size: 0.9rem; }
+    .news-card a { text-decoration: none; color: blue; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Noticias Globales</h1>
-    <p>Actualizadas automáticamente desde fuentes confiables</p>
-  </header>
-
-  <div class="controls">
-    <input type="text" id="searchInput" placeholder="Buscar noticias...">
-    <select id="languageSelect">
-      <option value="es" selected>Español</option>
-      <option value="en">English</option>
-    </select>
-  </div>
-
-  <nav id="menu"></nav>
-  <main id="contenedorNoticias"></main>
-
-  <footer>
-    <p>&copy; 2025 Noticias Globales</p>
-  </footer>
-
+  <header>Noticias Globales</header>
+  <div id="news"></div>
   <script>
-    const feedSources = {
-      es: {
-        internacional: ["Internacional", "https://feeds.bbci.co.uk/mundo/rss.xml"],
-        argentina: ["Argentina", "https://www.infobae.com/argentina/feed"],
-        economía: ["Economía", "https://www.lanacion.com.ar/economia/rss"],
-        ciencia: ["Ciencia", "https://www.agenciasinc.es/rss"],
-        tecnología: ["Tecnología", "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/technology/portada"],
-        espacio: ["Espacio", "https://nasaes.tumblr.com/rss"],
-        salud: ["Salud", "https://www.consalud.es/rss"],
-        clima: ["Clima", "https://www.climatempo.com.br/rss"],
-        energía: ["Energía", "https://www.energias-renovables.com/rss"],
-        autos: ["Automotriz", "https://rss.motorpress-iberica.es/autopista"],
-        defensa: ["Armamentística", "https://www.infodefensa.com/rss/portada.xml"],
-        geopolítica: ["Geopolítica", "https://es.theepochtimes.com/feed"]
-      },
-      en: {
-        internacional: ["World", "https://feeds.bbci.co.uk/news/world/rss.xml"],
-        argentina: ["Argentina", "https://feeds.reuters.com/Reuters/worldNews"],
-        economía: ["Economy", "https://feeds.reuters.com/news/economy"],
-        ciencia: ["Science", "https://www.nature.com/subjects/news.rss"],
-        tecnología: ["Technology", "https://www.theverge.com/rss/index.xml"],
-        espacio: ["Space", "https://www.nasa.gov/rss/dyn/breaking_news.rss"],
-        salud: ["Medical", "https://www.medicalnewstoday.com/rss"],
-        clima: ["Climate", "https://climate.nasa.gov/rss/"],
-        energía: ["Energy", "https://www.renewableenergyworld.com/feed/"],
-        autos: ["Automotive", "https://www.autoblog.com/rss.xml"],
-        defensa: ["Defense", "https://feeds.defensenews.com/defensenews/home"],
-        geopolítica: ["Geopolitics", "https://foreignpolicy.com/feed/"]
-      }
+    const categories = {
+      "Internacionales": "https://feeds.bbci.co.uk/news/world/rss.xml",
+      "Política": "https://www.lanacion.com.ar/rss/politica/",
+      "Económicas": "https://www.lanacion.com.ar/rss/economia/",
+      "Ciencia": "https://www.nature.com/subjects/science/rss",
+      "Tecnología": "https://feeds.arstechnica.com/arstechnica/index",
+      "Avances Médicos": "https://www.medicalnewstoday.com/rss",
+      "Espaciales": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+      "Manufactura": "https://www.manufacturing.net/rss/all",
+      "Climática": "https://climate.nasa.gov/rss/",
+      "Armamentísticas": "https://feeds.defensenews.com/defensenews/home",
+      "Geopolítica": "https://foreignpolicy.com/feed/",
+      "Energética": "https://www.energy.gov/rss",
+      "Automotriz": "https://www.autoblog.com/rss.xml"
     };
 
-    let currentLang = "es";
-    const loadedArticles = {}; // Para evitar duplicados
-
-    function cargarNoticias(idioma = 'es') {
-      currentLang = idioma;
-      const contenedor = document.getElementById("contenedorNoticias");
-      const nav = document.getElementById("menu");
-      contenedor.innerHTML = "";
-      nav.innerHTML = "";
-      Object.keys(loadedArticles).forEach(k => loadedArticles[k] = []);
-
-      const feeds = feedSources[idioma];
-      for (const [clave, [titulo, url]] of Object.entries(feeds)) {
-        const section = document.createElement("section");
-        section.id = clave;
-        section.innerHTML = `<h2>${titulo}</h2><div class="noticias-scroll" id="feed-${clave}"><div>Cargando...</div></div>`;
-        contenedor.appendChild(section);
-
-        const link = document.createElement("a");
-        link.href = `#${clave}`;
-        link.textContent = titulo;
-        nav.appendChild(link);
-
-        if (!loadedArticles[clave]) loadedArticles[clave] = [];
-        cargarFeed(clave, url);
-        setInterval(() => cargarFeed(clave, url), 300000); // cada 5 minutos
+    async function fetchRSS(url) {
+      const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+      try {
+        const response = await fetch(proxy);
+        const data = await response.json();
+        const parser = new DOMParser();
+        return parser.parseFromString(data.contents, "text/xml");
+      } catch (e) {
+        return null;
       }
-
-      document.title = idioma === "es" ? "Noticias Globales" : "Global News";
-      document.querySelector("header h1").textContent = document.title;
-      document.querySelector("header p").textContent = idioma === "es"
-        ? "Actualizadas automáticamente desde fuentes confiables"
-        : "Automatically updated from reliable sources";
     }
 
-    function cargarFeed(clave, url) {
-      fetch("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url))
-        .then(r => r.json())
-        .then(data => {
-          const div = document.getElementById("feed-" + clave);
-          if (!data.items) return;
-          const nuevos = data.items.filter(item => !loadedArticles[clave].includes(item.link));
-          nuevos.forEach(item => {
-            const noticia = document.createElement("div");
-            noticia.className = "noticia";
-            noticia.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
-            div.insertBefore(noticia, div.firstChild);
-            loadedArticles[clave].push(item.link);
-          });
-          if (nuevos.length === 0 && div.children.length === 1 && div.children[0].innerText === "Cargando...")
-            div.innerHTML = "<div>Sin noticias disponibles en este momento.</div>";
-        })
-        .catch(() => {
-          const div = document.getElementById("feed-" + clave);
-          div.innerHTML = "<div>No se pudo cargar el feed.</div>";
-        });
+    function createCard(item) {
+      const title = item.querySelector("title")?.textContent || "Sin título";
+      const link = item.querySelector("link")?.textContent || "#";
+      const desc = item.querySelector("description")?.textContent || "";
+      return `<div class="news-card"><h3><a href="${link}" target="_blank">${title}</a></h3><p>${desc}</p></div>`;
     }
 
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const search = this.value.toLowerCase();
-      document.querySelectorAll(".noticia").forEach(noticia => {
-        const texto = noticia.textContent.toLowerCase();
-        noticia.style.display = texto.includes(search) ? "" : "none";
-      });
-    });
+    async function loadNews() {
+      const newsContainer = document.getElementById("news");
+      newsContainer.innerHTML = "";
+      for (const [category, url] of Object.entries(categories)) {
+        const xml = await fetchRSS(url);
+        if (!xml) continue;
+        const items = xml.querySelectorAll("item");
+        let cards = "";
+        items.forEach((item, i) => { if (i < 10) cards += createCard(item); });
+        newsContainer.innerHTML += `<div class="category"><h2>${category}</h2><div class="news-container">${cards}</div></div>`;
+      }
+    }
 
-    document.getElementById("languageSelect").addEventListener("change", function () {
-      cargarNoticias(this.value);
-    });
-
-    cargarNoticias();
+    loadNews();
+    setInterval(loadNews, 300000); // cada 5 minutos
   </script>
 </body>
 </html>
