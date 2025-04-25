@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,14 +11,13 @@
     nav { background-color: #0055a5; overflow-x: auto; white-space: nowrap; }
     nav a { display: inline-block; color: white; padding: 1em; text-decoration: none; }
     nav a:hover { background-color: #003366; }
-    main { display: flex; flex-wrap: wrap; padding: 1em; justify-content: center; }
-    section { flex: 1 1 400px; margin: 1em; padding: 1em; background-color: white;
-              border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 600px; }
-    h2 { color: #003366; font-size: 1.3em; }
-    ul { list-style-type: none; padding: 0; }
-    li { margin-bottom: 0.5em; }
-    a { text-decoration: none; color: #0055a5; }
-    a:hover { text-decoration: underline; }
+    main { display: flex; flex-direction: column; padding: 1em; gap: 1em; }
+    section { background-color: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 1em; }
+    h2 { color: #003366; font-size: 1.3em; margin-bottom: 0.5em; }
+    .noticias-scroll { display: flex; overflow-x: auto; gap: 1em; scroll-behavior: smooth; padding-bottom: 0.5em; }
+    .noticia { min-width: 300px; max-width: 300px; background: #f9f9f9; border: 1px solid #ddd;
+               padding: 0.5em; border-radius: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .noticia a { text-decoration: none; color: #0055a5; font-weight: bold; }
     .controls { background: #e0e0e0; padding: 1em; text-align: center; }
     .controls input, .controls select {
       padding: 0.5em; margin: 0.5em; font-size: 1em;
@@ -38,109 +38,116 @@
     </select>
   </div>
 
-  <nav>
-    <a href="#internacional">Internacional</a>
-    <a href="#argentina">Argentina</a>
-    <a href="#economía">Economía</a>
-    <a href="#ciencia">Ciencia</a>
-    <a href="#medicina">Medicina</a>
-    <a href="#espacio">Espacio</a>
-    <a href="#tecnología">Tecnología</a>
-    <a href="#clima">Clima</a>
-    <a href="#energía">Energía</a>
-    <a href="#automotriz">Automotriz</a>
-  </nav>
-
-  <main>
-    <section id="internacional"><h2>Internacional</h2><ul id="feed-internacional"></ul></section>
-    <section id="argentina"><h2>Argentina</h2><ul id="feed-argentina"></ul></section>
-    <section id="economía"><h2>Economía</h2><ul id="feed-economía"></ul></section>
-    <section id="ciencia"><h2>Ciencia</h2><ul id="feed-ciencia"></ul></section>
-    <section id="medicina"><h2>Medicina</h2><ul id="feed-medicina"></ul></section>
-    <section id="espacio"><h2>Espacio</h2><ul id="feed-espacio"></ul></section>
-    <section id="tecnología"><h2>Tecnología</h2><ul id="feed-tecnología"></ul></section>
-    <section id="clima"><h2>Clima</h2><ul id="feed-clima"></ul></section>
-    <section id="energía"><h2>Energía</h2><ul id="feed-energía"></ul></section>
-    <section id="automotriz"><h2>Automotriz</h2><ul id="feed-automotriz"></ul></section>
-  </main>
+  <nav id="menu"></nav>
+  <main id="contenedorNoticias"></main>
 
   <footer>
     <p>&copy; 2025 Noticias Globales</p>
   </footer>
 
   <script>
-    const feeds = {
-      "internacional": "https://feeds.bbci.co.uk/news/world/rss.xml",
-      "argentina": "https://www.infobae.com/argentina/feed",
-      "economía": "https://www.bloomberg.com/feed/podcast/etf-report.xml",
-      "ciencia": "https://www.nature.com/subjects/news.rss",
-      "medicina": "https://www.medscape.com/rss",
-      "espacio": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
-      "tecnología": "https://techcrunch.com/feed/",
-      "clima": "https://www.noaa.gov/news/rss.xml",
-      "energía": "https://www.energy.gov/rss/office-energy-efficiency-renewable-energy.xml",
-      "automotriz": "https://www.autoblog.com/rss.xml"
+    const feedSources = {
+      es: {
+        internacional: ["Internacional", "https://feeds.bbci.co.uk/mundo/rss.xml"],
+        argentina: ["Argentina", "https://www.infobae.com/argentina/feed"],
+        economía: ["Economía", "https://www.lanacion.com.ar/economia/rss"],
+        ciencia: ["Ciencia", "https://www.agenciasinc.es/rss"],
+        tecnología: ["Tecnología", "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/technology/portada"],
+        espacio: ["Espacio", "https://nasaes.tumblr.com/rss"],
+        salud: ["Salud", "https://www.consalud.es/rss"],
+        clima: ["Clima", "https://www.climatempo.com.br/rss"],
+        energía: ["Energía", "https://www.energias-renovables.com/rss"],
+        autos: ["Automotriz", "https://rss.motorpress-iberica.es/autopista"],
+        defensa: ["Armamentística", "https://www.infodefensa.com/rss/portada.xml"],
+        geopolítica: ["Geopolítica", "https://es.theepochtimes.com/feed"]
+      },
+      en: {
+        internacional: ["World", "https://feeds.bbci.co.uk/news/world/rss.xml"],
+        argentina: ["Argentina", "https://feeds.reuters.com/Reuters/worldNews"],
+        economía: ["Economy", "https://feeds.reuters.com/news/economy"],
+        ciencia: ["Science", "https://www.nature.com/subjects/news.rss"],
+        tecnología: ["Technology", "https://www.theverge.com/rss/index.xml"],
+        espacio: ["Space", "https://www.nasa.gov/rss/dyn/breaking_news.rss"],
+        salud: ["Medical", "https://www.medicalnewstoday.com/rss"],
+        clima: ["Climate", "https://climate.nasa.gov/rss/"],
+        energía: ["Energy", "https://www.renewableenergyworld.com/feed/"],
+        autos: ["Automotive", "https://www.autoblog.com/rss.xml"],
+        defensa: ["Defense", "https://feeds.defensenews.com/defensenews/home"],
+        geopolítica: ["Geopolitics", "https://foreignpolicy.com/feed/"]
+      }
     };
 
-    for (const [key, url] of Object.entries(feeds)) {
+    let currentLang = "es";
+    const loadedArticles = {}; // Para evitar duplicados
+
+    function cargarNoticias(idioma = 'es') {
+      currentLang = idioma;
+      const contenedor = document.getElementById("contenedorNoticias");
+      const nav = document.getElementById("menu");
+      contenedor.innerHTML = "";
+      nav.innerHTML = "";
+      Object.keys(loadedArticles).forEach(k => loadedArticles[k] = []);
+
+      const feeds = feedSources[idioma];
+      for (const [clave, [titulo, url]] of Object.entries(feeds)) {
+        const section = document.createElement("section");
+        section.id = clave;
+        section.innerHTML = `<h2>${titulo}</h2><div class="noticias-scroll" id="feed-${clave}"><div>Cargando...</div></div>`;
+        contenedor.appendChild(section);
+
+        const link = document.createElement("a");
+        link.href = `#${clave}`;
+        link.textContent = titulo;
+        nav.appendChild(link);
+
+        if (!loadedArticles[clave]) loadedArticles[clave] = [];
+        cargarFeed(clave, url);
+        setInterval(() => cargarFeed(clave, url), 300000); // cada 5 minutos
+      }
+
+      document.title = idioma === "es" ? "Noticias Globales" : "Global News";
+      document.querySelector("header h1").textContent = document.title;
+      document.querySelector("header p").textContent = idioma === "es"
+        ? "Actualizadas automáticamente desde fuentes confiables"
+        : "Automatically updated from reliable sources";
+    }
+
+    function cargarFeed(clave, url) {
       fetch("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url))
-        .then(response => response.json())
+        .then(r => r.json())
         .then(data => {
-          const list = document.getElementById("feed-" + key);
-          if (data.items) {
-            data.items.slice(0, 5).forEach(item => {
-              const li = document.createElement("li");
-              li.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
-              list.appendChild(li);
-            });
-          }
+          const div = document.getElementById("feed-" + clave);
+          if (!data.items) return;
+          const nuevos = data.items.filter(item => !loadedArticles[clave].includes(item.link));
+          nuevos.forEach(item => {
+            const noticia = document.createElement("div");
+            noticia.className = "noticia";
+            noticia.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
+            div.insertBefore(noticia, div.firstChild);
+            loadedArticles[clave].push(item.link);
+          });
+          if (nuevos.length === 0 && div.children.length === 1 && div.children[0].innerText === "Cargando...")
+            div.innerHTML = "<div>Sin noticias disponibles en este momento.</div>";
         })
         .catch(() => {
-          const list = document.getElementById("feed-" + key);
-          const li = document.createElement("li");
-          li.textContent = "No se pudieron cargar noticias.";
-          list.appendChild(li);
+          const div = document.getElementById("feed-" + clave);
+          div.innerHTML = "<div>No se pudo cargar el feed.</div>";
         });
     }
 
-    // Buscador
     document.getElementById("searchInput").addEventListener("input", function () {
-      const searchTerm = this.value.toLowerCase();
-      document.querySelectorAll("section ul li").forEach(li => {
-        const text = li.textContent.toLowerCase();
-        li.style.display = text.includes(searchTerm) ? "" : "none";
+      const search = this.value.toLowerCase();
+      document.querySelectorAll(".noticia").forEach(noticia => {
+        const texto = noticia.textContent.toLowerCase();
+        noticia.style.display = texto.includes(search) ? "" : "none";
       });
     });
 
-    // Cambiar idioma
     document.getElementById("languageSelect").addEventListener("change", function () {
-      const lang = this.value;
-      const translations = {
-        "es": {
-          "internacional": "Internacional", "argentina": "Argentina", "economía": "Economía",
-          "ciencia": "Ciencia", "medicina": "Medicina", "espacio": "Espacio", "tecnología": "Tecnología",
-          "clima": "Clima", "energía": "Energía", "automotriz": "Automotriz"
-        },
-        "en": {
-          "internacional": "World", "argentina": "Argentina", "economía": "Economy",
-          "ciencia": "Science", "medicina": "Medicine", "espacio": "Space", "tecnología": "Technology",
-          "clima": "Climate", "energía": "Energy", "automotriz": "Automotive"
-        }
-      };
-
-      for (const [id, text] of Object.entries(translations[lang])) {
-        const section = document.querySelector(`#${id} h2`);
-        if (section) section.textContent = text;
-        const navLink = document.querySelector(`nav a[href="#${id}"]`);
-        if (navLink) navLink.textContent = text;
-      }
-
-      document.title = lang === "es" ? "Noticias Globales" : "Global News";
-      document.querySelector("header h1").textContent = document.title;
-      document.querySelector("header p").textContent = lang === "es"
-        ? "Actualizadas automáticamente desde fuentes confiables"
-        : "Automatically updated from reliable sources";
+      cargarNoticias(this.value);
     });
+
+    cargarNoticias();
   </script>
 </body>
 </html>
